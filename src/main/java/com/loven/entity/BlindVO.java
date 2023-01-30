@@ -19,5 +19,6 @@ public class BlindVO {
 	private int likes;
 	private char order;
 	private String id;
+	private String nick;
 	
 }

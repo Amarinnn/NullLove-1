@@ -31,8 +31,8 @@ public class ImgBoardServiceImpl implements ImgBoardService{
 	}
 
 	@Override
-	public boolean cntPlus(int seq) {
-		return mapper.cntPlus(seq);
+	public void cntPlus(int seq) {
+		 mapper.cntPlus(seq);
 	}
 
 	@Override

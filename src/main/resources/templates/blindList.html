@@ -14,6 +14,8 @@
   <link rel="stylesheet" href="./assets/css/plugins.css">
   <link rel="stylesheet" href="./assets/css/style.css">
   <link rel="preload" href="./assets/css/fonts/noto2.css" as="style" onload="this.rel='stylesheet'">
+
+
 </head>
 
 <body>
@@ -25,7 +27,7 @@
     <div class="container pt-17 pb-20 pt-md-15 pb-md-21 text-center">
       <div class="row">
         <div class="col-lg-8 mx-auto">
-          <h1 class="display-1 mb-3">블라인드 게시판</h1>
+          <h1 class="display-1 mb-3">BBlind</h1>
           <!-- /nav -->
         </div>
         <!-- /column -->
@@ -59,7 +61,8 @@
                         <!--공지사항-->
                         <tr class="bg-soft-yellow text-orange" th:each="ablind:${alist}">
                           <td th:text="${ablind.seq}" class="text-center">seq</td>
-                          <td class="text-start"><a th:href="@{/blindView(seq=${ablind.seq})}" class="text-reset" th:text="${ablind.title}"></a></td>
+                          <td  th:if="${#lists.isEmpty(session.mvo)}" class="text-start"><a  href="javascript:altr()"  class="text-reset" th:text="${ablind.title}"></a></td>
+                          <td  th:if="${!#lists.isEmpty(session.mvo)}" class="text-start"><a th:href="@{/blindView(seq=${ablind.seq})}" class="text-reset" th:text="${ablind.title}"></a></td>
                           <td th:text="${ablind.id}" class="">id
                           </td>
                           <td th:text="${ablind.date}" class="">date</td>
@@ -68,7 +71,9 @@
                         <!--일반유저게시글-->
                         <tr  th:each="blind:${list}">
                           <td th:text="${blind.seq}" class="text-center">seq</td>
-                          <td class="text-start"><a th:href="@{/blindView(seq=${blind.seq})}" class="text-reset" th:text="${blind.title}"></a></td>
+                          <td  th:if="${#lists.isEmpty(session.mvo)}" class="text-start"><a  href="javascript:altr()"  class="text-reset" th:text="${blind.title}"></a></td>
+                          <td  th:if="${!#lists.isEmpty(session.mvo)}" class="text-start"><a th:href="@{/blindView(seq=${blind.seq})}" class="text-reset" th:text="${blind.title}"></a></td>
+
                           <td th:text="익명" class="">
                             <!-- <td th:text="${blind.id}" class="">id -->
                           </td>
@@ -174,6 +179,11 @@
 </div>
 <script src="./assets/js/plugins.js"></script>
 <script src="./assets/js/theme.js"></script>
+<script>
+  function altr(){
+    alert("로그인 후 이용 가능합니다.");
+  }
+</script>
 
 </body>
 

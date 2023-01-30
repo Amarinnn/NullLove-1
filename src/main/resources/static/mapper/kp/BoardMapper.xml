@@ -59,7 +59,7 @@
 	</update>
 	<!-- 블라인드 게시판 상세보기 -->
 	<select id="blindView" resultType="BlindVO" parameterType="int">
-		select * from blind where seq=#{seq}
+		select b.*, u.nick from blind b,User u where b.seq=#{seq} and u.id = (select id from blind where seq=#{seq});
 	</select>
 	<!-- 블라인드 게시판 업데이트 -->
 	<update id="blindUpdate" parameterType="BlindVO">

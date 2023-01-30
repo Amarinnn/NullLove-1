@@ -54,17 +54,29 @@
                       <div th:each="img:${list}" class="col-3 mt-3 item">
                         <article class="post">
                           <div class="card">
-                            <figure class="card-img-top overlay overlay-1 hover-scale" style="height:200px; overflow:hidden"><a th:href="@{/imgBoardView(seq=${img.seq})}">
-                             <img id="imgId" th:src="'./uploadImg/'+${img.file1}" alt="첨부이미지" />
-                             <!-- <img src="./assets/img/photos/b4.jpg" alt="" /></a> -->
-                              <figcaption style="height:200px;">
-                                <h5 class="from-top mb-0">Read More</h5>
-                              </figcaption>
+                            <figure class="card-img-top overlay overlay-1 hover-scale" style="height:200px; overflow:hidden">
+                              <a th:if="${!#lists.isEmpty(session.mvo)}" th:href="@{/imgBoardView(seq=${img.seq})}">
+                               <img id="imgId" th:src="'./uploadImg/'+${img.file1}" alt="첨부이미지" />
+                               <!-- <img src="./assets/img/photos/b4.jpg" alt="" /></a> -->
+                                <figcaption style="height:200px;">
+                                  <h5 class="from-top mb-0">Read More</h5>
+                                </figcaption>
+                              </a>
+                              <a th:if="${#lists.isEmpty(session.mvo)}" href="javascript:altr()" >
+                                <img id="imgId" th:src="'./uploadImg/'+${img.file1}" alt="첨부이미지" />
+                                <!-- <img src="./assets/img/photos/b4.jpg" alt="" /></a> -->
+                                <figcaption style="height:200px;">
+                                  <h5 class="from-top mb-0">Read More</h5>
+                                </figcaption>
+                              </a>
                             </figure>
                             <div class="card-body  p-3" style="height:125px;">
                               <div class="post-header">
-                                <h2 class="post-title fs-16 my-1 text-start"><a  th:text="${img.title}"  class="link-dark"
+                                <h2 th:if="${!#lists.isEmpty(session.mvo)}" class="post-title fs-16 my-1 text-start"><a  th:text="${img.title}"  class="link-dark"
                                     th:href="@{/imgBoardView(seq=${img.seq})}">title</a>
+                                </h2>
+                                <h2  th:if="${#lists.isEmpty(session.mvo)}" class="post-title fs-16 my-1 text-start"><a  th:text="${img.title}"  class="link-dark"
+                                                                                                                         href="javascript:altr()">title</a>
                                 </h2>
                               </div>
                               <!-- /.post-header -->
@@ -145,23 +157,10 @@
   <script src="./assets/js/plugins.js"></script>
   <script src="./assets/js/theme.js"></script>
   <script src="./assets/js/purePajinate.js"></script>
- <script th:inline="javascript">
-	  /*<![CDATA[*/
-    document.onreadystatechange = function() {
-		if (document.readyState === "complete") {
-			var example_1 = new purePajinate({ 
-				containerSelector: '.example_1 .items', 
-				itemSelector: '.example_1 .items > div', 
-				navigationSelector: '.example_1 .page_navigation',
-				itemsPerPage: 12,
-				pageLinksToDisplay: 5,
-				jquery_ui: true,
-				defaultClass : 'page-item',
-				navOrder: ["first", "prev", "num", "next", "last"],
-				showFirstLast : true
-			});
-		}};
-     /*]]>*/
+  <script>
+  function altr(){
+    alert("로그인 후 이용 가능합니다.");
+  }
 </script>
 </body>
 
