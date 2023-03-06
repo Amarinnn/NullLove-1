@@ -36,5 +36,11 @@
 	<delete id="imgBoardDelete">
 		delete from boast where seq=#{seq}
 	</delete>
-    
+	<select id="searchTitle" resultType="Boast" parameterType="hashmap">
+		select * from boast where title like concat('%', #{search}, '%')
+	</select>
+
+	<select id="searchContent" resultType="Boast" parameterType="hashmap">
+		select * from boast where content like concat('%', #{search}, '%')
+	</select>
 </mapper>

@@ -1,7 +1,9 @@
 package com.loven.jy.service;
 
+import java.util.HashMap;
 import java.util.List;
 
+import com.loven.entity.BlindVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -32,7 +34,7 @@ public class ImgBoardServiceImpl implements ImgBoardService{
 
 	@Override
 	public void cntPlus(int seq) {
-		 mapper.cntPlus(seq);
+		mapper.cntPlus(seq);
 	}
 
 	@Override
@@ -50,6 +52,16 @@ public class ImgBoardServiceImpl implements ImgBoardService{
 		mapper.imgFileInsert(vo);
 	}
 
-	
+	@Override
+	public List<Boast> searchTitle(HashMap<String, Object> map) {
+
+		return mapper.searchTitle(map);
+	}
+	// 게시글 검색(내용)
+	@Override
+	public List<Boast> searchContent(HashMap<String, Object> map){
+
+		return mapper.searchContent(map);
+	}
 	
 }	

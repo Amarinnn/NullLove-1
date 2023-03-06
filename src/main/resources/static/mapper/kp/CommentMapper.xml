@@ -5,7 +5,8 @@
 <mapper namespace="com.loven.mapper.CommentMapper">
 
     <select id="commentList" resultType="Comment">
-        select * from blind_cmt where seq=#{seq}
+        select b.*, u.nick from blind_cmt b, User u
+        where b.id = u.id and seq=#{seq}
     </select>
 
     <insert id="commentInsert" parameterType="Comment">

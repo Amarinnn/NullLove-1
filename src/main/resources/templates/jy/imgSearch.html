@@ -50,6 +50,7 @@
               <div class="card-body text-center">
                 <div class="row row-cards example_1">
                   <div class="col-12 mt-5 ">
+                    <div class="mb-7" th:if="${#lists.isEmpty(list)}"> 검색결과가 없습니다. </div>
                     <div class="row items" id="d-con">
                       <div th:each="img:${list}" class="col-3 mt-3 item">
                         <article class="post">

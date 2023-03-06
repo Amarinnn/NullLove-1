@@ -2,12 +2,16 @@ package com.loven.jy.controller;
 
 import java.io.File;
 import java.io.InputStream;
+import java.util.HashMap;
 import java.util.List;
 import java.util.UUID;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletRequestWrapper;
 
+import com.loven.entity.BlindVO;
+import com.loven.entity.Criteria;
+import com.loven.entity.PageMaker;
 import org.apache.commons.io.FileUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -145,7 +149,33 @@ public class ImgBoardCtrl {
 		service.imgBoardDelete(seq);
 		return "redirect:/imgBoardList";
 	}
-	
+	@GetMapping("/imgSearch{page}")
+	public String searchList(@RequestParam("search") String search, @RequestParam("option") String option, Model model, Integer page) {
+		if(search==null) {
+			search="";
+		}
+		if(option==null) {
+			option = "1";
+		}
+		List<Boast> list = null;
+		HashMap<String, Object> map = new HashMap<String, Object>();
+		map.put("search", search);
+		if(search == "") {
+			list = service.getLists();
+			model.addAttribute("list", list);
+			return "redirect:/imgBoardList";
+		}else {
+			if(option.equals("1")) {
+				list = service.searchTitle(map);
+			}else {
+				list = service.searchContent(map);
+			}
+		}
+		model.addAttribute("list", list);
+
+		return "jy/imgSearch";
+
+	}
 	
 }
 	

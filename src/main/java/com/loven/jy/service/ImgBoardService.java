@@ -1,7 +1,9 @@
 package com.loven.jy.service;
 
+import java.util.HashMap;
 import java.util.List;
 
+import com.loven.entity.BlindVO;
 import com.loven.jy.entity.Boast;
 
 public interface ImgBoardService {
@@ -12,5 +14,7 @@ public interface ImgBoardService {
 	public void cntPlus(int seq);
 	public void imgBoardUpdate(Boast vo);
 	public void imgBoardDelete(int seq);
-	
+	public List<Boast> searchTitle(HashMap<String, Object> map);
+
+	public List<Boast> searchContent(HashMap<String, Object> map);
 }

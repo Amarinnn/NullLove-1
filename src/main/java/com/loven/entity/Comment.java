@@ -10,4 +10,5 @@ public class Comment {
     private String reg_date;
     private int seq;
     private String id;
+    private String nick;
 }

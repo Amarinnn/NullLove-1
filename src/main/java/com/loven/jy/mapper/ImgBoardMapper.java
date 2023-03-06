@@ -1,5 +1,6 @@
 package com.loven.jy.mapper;
 
+import java.util.HashMap;
 import java.util.List;
 
 import org.apache.ibatis.annotations.Mapper;
@@ -16,4 +17,7 @@ public interface ImgBoardMapper {
 	public void cntPlus(int seq);
 	public void imgBoardUpdate(Boast vo);
 	public void imgBoardDelete(int seq);
+
+	public List<Boast> searchTitle(HashMap<String, Object> map);
+	public List<Boast> searchContent(HashMap<String, Object> map);
 }

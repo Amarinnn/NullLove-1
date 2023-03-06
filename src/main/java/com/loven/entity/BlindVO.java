@@ -20,5 +20,4 @@ public class BlindVO {
 	private char order;
 	private String id;
 	private String nick;
-	
 }
