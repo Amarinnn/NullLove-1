@@ -144,5 +144,24 @@ public class BoardServiceImpl implements BoardService{
 		int cnt = mapper.cntSearch2(search);
 		return cnt;
 	}
+
+	@Override
+	public int blindlikeSelect(int seq) {
+		return mapper.blindlikeSelect(seq);
+	}
+
+	@Override
+	public int blindlikeWho(HashMap<String, Object> map) {
+		return mapper.blindlikeWho(map);
+	}
+
+	@Override
+	public void blindlikeUp(HashMap<String, Object> map) {
+		mapper.blindlikeUp(map);
+	}
+	@Override
+	public void blindlikeDel(HashMap<String, Object> map) {
+		mapper.blindlikeDel(map);
+	}
 	
 }

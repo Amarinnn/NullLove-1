@@ -3,7 +3,10 @@
 <mapper namespace="com.loven.jy.mapper.ImgBoardMapper">
 
   <select id="getLists" resultType="Boast">
-     select * from boast order by seq desc
+	  SELECT b.*,  sum(case when l.seq = b.seq then 1 else 0 end) as count
+	  FROM boast_like l, boast b
+	  GROUP BY b.seq
+	  order by b.seq desc;
   </select>
 
   <insert id="imgBoardInsert" parameterType="Boast">
@@ -11,7 +14,7 @@
   	values(#{title},#{content},NOW(),#{id})
   </insert>
   <update id="imgFileInsert" parameterType="Boast">
-  	update boast set
+	  update boast set
   		file1 = #{file1},
   		file2 = #{file2},
   		file3 = #{file3},
@@ -37,10 +40,30 @@
 		delete from boast where seq=#{seq}
 	</delete>
 	<select id="searchTitle" resultType="Boast" parameterType="hashmap">
-		select * from boast where title like concat('%', #{search}, '%')
+		select b.*,  sum(case when l.seq = b.seq then 1 else 0 end) as count
+		from boast_like l, boast b
+		where title like concat('%', #{search}, '%')
+		group by b.seq
+		order by b.seq desc
 	</select>
 
 	<select id="searchContent" resultType="Boast" parameterType="hashmap">
-		select * from boast where content like concat('%', #{search}, '%')
+		select b.*,  sum(case when l.seq = b.seq then 1 else 0 end) as count
+		from boast_like l, boast b
+		where content like concat('%', #{search}, '%')
+		group by b.seq
+		order by b.seq desc
 	</select>
+	<select id="imglikeSelect" resultType="int" parameterType="int">
+		select count(*) from boast_like where seq=#{seq}
+	</select>
+	<select id="imglikeWho" resultType="int" parameterType="hashmap">
+		select count(*) from boast_like where seq=#{seq} and id=#{id}
+	</select>
+	<insert id="imglikeUp" parameterType="hashmap">
+		insert into boast_like values(1,#{seq},#{id});
+	</insert>
+	<delete id="imglikeDel" parameterType="hashmap">
+		delete from boast_like where  seq=#{seq} and id=#{id}
+	</delete>
 </mapper>

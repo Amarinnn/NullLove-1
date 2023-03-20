@@ -20,7 +20,7 @@ import lombok.NoArgsConstructor;
 public class Boast {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)//pk이면서 자동증가칼럼
-	private Long seq;
+	private int seq;
 	private String title;
 	private String content;
 	
@@ -35,6 +35,7 @@ public class Boast {
 	@Column(columnDefinition = "char default n")
 	private char order;
 	private String id;
+	private int count;
 	
 	
 	private String file1;

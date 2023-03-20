@@ -34,4 +34,8 @@ public interface BoardMapper {
 	public List<BlindVO> searchContent(HashMap<String, Object> map);
 	public int cntSearch1(String search);
 	public int cntSearch2(String search);
+	public int blindlikeSelect(int seq);
+	public int blindlikeWho(HashMap<String,Object> map);
+	public void blindlikeUp(HashMap<String,Object> map);
+	public void blindlikeDel(HashMap<String,Object> map);
 }

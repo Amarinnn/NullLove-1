@@ -8,10 +8,13 @@ import java.util.UUID;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletRequestWrapper;
+import javax.servlet.http.HttpSession;
 
 import com.loven.entity.BlindVO;
 import com.loven.entity.Criteria;
 import com.loven.entity.PageMaker;
+import com.loven.entity.User;
+import com.loven.jy.entity.Boast_like;
 import org.apache.commons.io.FileUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -118,17 +121,31 @@ public class ImgBoardCtrl {
 	
 	//상세view
 	@RequestMapping("/imgBoardView")
-	public String imgBoardView(@RequestParam("seq") int seq, Model model) {
+	public String imgBoardView(@RequestParam("seq") int seq, Model model, HttpServletRequest request) {
 		Boast vo = service.imgBoardView(seq);
 		List<Boast_cmt> cmt = cmtService.imgCmtList(seq);
 		model.addAttribute("vo",vo);
 		model.addAttribute("cmt",cmt);
 		service.cntPlus(seq);
+		int vol= service.imglikeSelect(seq);
+		model.addAttribute("vol",vol);
+//		//like 조회
+		HttpSession session = request.getSession();
+		User mvo = (User) session.getAttribute("mvo");
+		String id = mvo.getId();
+		System.out.println(id);
+		HashMap<String, Object> map = new HashMap<String, Object>();
+		map.put("seq",seq);
+		map.put("id",id);
+		int color = service.imglikeWho(map);
+		System.out.println(color);
+		model.addAttribute("color",color);
 		return "jy/imgBoardView";
 	}
 	// 게시판 수정 폼
-	@GetMapping("/imgBoardUpdateForm/{seq}")
-	public String imgBoardUpdateForm(Model model,@PathVariable int seq) {
+	@RequestMapping("/imgBoardUpdateForm")
+	public String imgBoardUpdateForm(Model model,@RequestParam("seq") int seq) {
+		System.out.println(seq);
 		Boast vo = service.imgBoardView(seq);
 		model.addAttribute("vo", vo);
 		return "jy/imgBoardUpdate";
@@ -144,13 +161,14 @@ public class ImgBoardCtrl {
 	}
 	
 	// 게시판 삭제
-	@GetMapping("/imgBoardDelete/{seq}")
-	public String imgBoardDelete(@PathVariable int seq) {
+	@RequestMapping("/imgBoardDelete")
+	public String imgBoardDelete(@RequestParam("seq") int seq) {
 		service.imgBoardDelete(seq);
 		return "redirect:/imgBoardList";
 	}
-	@GetMapping("/imgSearch{page}")
-	public String searchList(@RequestParam("search") String search, @RequestParam("option") String option, Model model, Integer page) {
+	//게시판 검색
+	@GetMapping("/imgSearch")
+	public String searchList(@RequestParam("search") String search, @RequestParam("option") String option, Model model){
 		if(search==null) {
 			search="";
 		}
@@ -176,6 +194,22 @@ public class ImgBoardCtrl {
 		return "jy/imgSearch";
 
 	}
-	
+	//게시판 좋아요
+	@RequestMapping("/imglikeUp")
+	@ResponseBody
+	private void imglikeUp(@RequestParam("seq") int seq,@RequestParam("id") String id) {
+		HashMap<String, Object> map = new HashMap<String, Object>();
+		map.put("seq",seq);
+		map.put("id",id);
+		service.imglikeUp(map);
+	}
+	@RequestMapping("/imglikeDel")
+	@ResponseBody
+	private void imglikeDel(@RequestParam("seq") int seq,@RequestParam("id") String id) {
+		HashMap<String, Object> map = new HashMap<String, Object>();
+		map.put("seq",seq);
+		map.put("id",id);
+		service.imglikeDel(map);
+	}
 }
 	

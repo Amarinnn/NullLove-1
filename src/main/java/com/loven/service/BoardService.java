@@ -48,4 +48,8 @@ public interface BoardService {
 	
 	public int cntSearch2(String search);
 
+	public int blindlikeSelect(int seq);
+	public int blindlikeWho(HashMap<String, Object> map);
+	public void blindlikeUp(HashMap<String, Object> map);
+	public void blindlikeDel(HashMap<String, Object> map);
 }

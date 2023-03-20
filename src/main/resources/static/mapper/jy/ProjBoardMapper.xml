@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.loven.jy.mapper.ProjBoardMapper">
+
+  <select id="getLists" resultType="Project">
+	  SELECT b.*,  sum(case when l.seq = b.seq then 1 else 0 end) as count
+	  FROM proj_like l, project b
+	  GROUP BY b.seq
+	  order by b.seq desc;
+  </select>
+
+  <insert id="projBoardInsert" parameterType="Project">
+  	insert into project(title,content,date,id,file)
+  	values(#{title},#{content},NOW(),#{id},#{file})
+  </insert>
+<!--  <update id="projFileInsert" parameterType="Project">-->
+<!--	  update project set-->
+<!--  		file = #{file}-->
+<!--    where seq = (select max(r.seq) from (select seq from project) as r );-->
+<!--  </update>-->
+  
+	
+  <select id="projBoardView" resultType="Project" parameterType="int">
+  	select * from project where seq=#{seq}
+  </select>
+  <update id="cntPlus" parameterType="int">
+		update project set
+		cnt = cnt+1
+		where
+		seq = #{seq}
+	</update>
+	<update id="projBoardUpdate" parameterType="Project">
+		update project set title=#{title}, content=#{content} where seq=#{seq} 
+	</update>
+	<delete id="projBoardDelete">
+		delete from project where seq=#{seq}
+	</delete>
+	<select id="searchTitle" resultType="Project" parameterType="hashmap">
+		select b.*,  sum(case when l.seq = b.seq then 1 else 0 end) as count
+		from proj_like l, project b
+		where title like concat('%', #{search}, '%')
+		group by b.seq
+		order by b.seq desc
+	</select>
+
+	<select id="searchContent" resultType="Project" parameterType="hashmap">
+		select b.*,  sum(case when l.seq = b.seq then 1 else 0 end) as count
+		from proj_like l, project b
+		where content like concat('%', #{search}, '%')
+		group by b.seq
+		order by b.seq desc
+	</select>
+	<select id="projlikeSelect" resultType="int" parameterType="int">
+		select count(*) from proj_like where seq=#{seq}
+	</select>
+	<select id="projlikeWho" resultType="int" parameterType="hashmap">
+		select count(*) from proj_like where seq=#{seq} and id=#{id}
+	</select>
+	<insert id="projlikeUp" parameterType="hashmap">
+		insert into proj_like values(1,#{seq},#{id});
+	</insert>
+	<delete id="projlikeDel" parameterType="hashmap">
+		delete from proj_like where  seq=#{seq} and id=#{id}
+	</delete>
+	<update id="projUpfile" parameterType="Project">
+		update project set file=#{file}
+	</update>
+	<update id="projUpnotice" parameterType="int">
+		update project set notice='A' where seq=#{seq}
+	</update>
+	<update id="projDelnotice" parameterType="int">
+		update project set notice='n' where seq=#{seq}
+	</update>
+	<select id="total" resultType="int">
+		select count(*) as count from project
+	</select>
+</mapper>

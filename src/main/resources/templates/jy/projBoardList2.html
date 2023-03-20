@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description"
+    content="An impressive and flawless site template that includes various UI elements and countless features, attractive ready-made blocks and rich pages, basically everything you need to create a unique and professional website.">
+  <meta name="keywords"
+    content="bootstrap 5, business, corporate, creative, gulp, marketing, minimal, modern, multipurpose, one page, responsive, saas, sass, seo, startup, html5 template, site template">
+  <meta name="author" content="elemis">
+  <title>RCMD</title>
+  <link rel="shortcut icon" href="./assets/img/favicon.png">
+  <link rel="stylesheet" href="./assets/css/plugins.css">
+  <link rel="stylesheet" href="./assets/css/style.css">
+  <link rel="stylesheet" href="./assets/css/jy.css">
+  <link rel="preload" href="./assets/css/fonts/noto2.css" as="style" onload="this.rel='stylesheet'">
+  <!-- pagenation -->
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script src="/js/jquery.twbsPagination.js"></script>
+</head>
+
+<body>
+  <div class="content-wrapper">
+    <th:block th:replace="jy/header" ::header></th:block>
+    <!-- /header -->
+    <section class="wrapper image-wrapper bg-image bg-overlay bg-overlay-light-600 text-white"
+      data-image-src="./assets/img/photos/bg18.png">
+      <div class="container pt-17 pb-20 pt-md-15 pb-md-21 text-center">
+        <div class="row">
+          <div class="col-lg-8 mx-auto">
+            <h1 class="display-1 mb-3">우수사업계획서</h1>
+            <!-- /nav -->
+          </div>
+          <!-- /column -->
+        </div>
+        <!-- /.row -->
+      </div>
+      <!-- /.container -->
+    </section>
+    <!-- /section -->
+    <section class="wrapper bg-light">
+      <div class="container pb-14 pb-md-16">
+        <div class="row">
+          <div class="col-lg-12 col-xl-12 col-xxl-12 mx-auto mt-n20">
+            <div class="card">
+              <div class="card-body text-center">
+                <div class="row row-cards ">
+                  <div class="col-12 mt-2">
+                    <div class="bg-light border-y">
+                      <div class="table-responsive">
+                        <table class="table table-sm table-hover  ">
+                          <thead class="bg-soft-ash ">
+                          <tr>
+                            <th>번호</th>
+                            <th style="width:32rem">제목</th>
+                            <th>글쓴이</th>
+                            <th>등록일</th>
+                            <th>좋아요</th>
+                            <th>조회</th>
+                          </tr>
+                          </thead>
+                          <tbody class="fw-semibold">
+                          <!--공지사항-->
+                          <tr class="bg-soft-yellow text-orange" th:if="${#strings.equals(proj.notice, 'A')}" th:each="proj:${list}">
+                            <td th:text="${proj.seq}" class="text-center">seq</td>
+                            <td   th:if="${#lists.isEmpty(session.mvo)}" class="text-start"><a  href="javascript:altr()"  class="text-reset" th:text="${proj.title}"></a></td>
+                            <td   th:if="${!#lists.isEmpty(session.mvo)}" class="text-start"><a th:href="@{/projBoardView(seq=${proj.seq})}" class="text-reset" th:text="${proj.title}"></a></td>
+                            <td th:text="${proj.id}" class="">id
+                            </td>
+                            <td th:text="${#dates.format(proj.date, 'yy-MM-dd')}" class="">date</td>
+                            <td th:text="${proj.count}" class="">count</td>
+                            <td th:text="${proj.cnt}" class="">cnt</td>
+                          </tr>
+                          <!--일반유저게시글-->
+                          <tr th:if="${#strings.equals(proj.notice, 'n')}" th:each="proj:${list}">
+                            <td th:text="${proj.seq}" class="text-center">seq</td>
+                            <td   th:if="${#lists.isEmpty(session.mvo)}" class="text-start"><a  href="javascript:altr()"  class="text-reset" th:text="${proj.title}"></a></td>
+                            <td   th:if="${!#lists.isEmpty(session.mvo)}" class="text-start"><a th:href="@{/projBoardView(seq=${proj.seq})}" class="text-reset" th:text="${proj.title}"></a></td>
+                            <td th:text="${proj.id}" class="">id
+                              <!-- <td th:text="${proj.id}" class="">id -->
+                            </td>
+                            <td th:text="${#dates.format(proj.date, 'yy-MM-dd')}" class="">date</td>
+                            <td th:text="${proj.count}" class="">count</td>
+                            <td th:text="${proj.cnt}" class="">cnt</td>
+                          </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                      <div class="row mb-4">
+                        <div class="col"></div>
+                        <div class="col">
+                          <nav class="d-flex" aria-label="pagination">
+                            <ul class="pagination mb-0" id="pagination">
+<!--                              <li class="page-item disabled">-->
+<!--                                <a class="page-link" href="#" aria-label="Previous">-->
+<!--                                  <span aria-hidden="true"><i class="uil uil-arrow-left"></i></span>-->
+<!--                                </a>-->
+<!--                              </li>-->
+<!--                              <li class="page-item active"><a class="page-link" href="#">1</a></li>-->
+<!--                              <li class="page-item"><a class="page-link" href="#">2</a></li>-->
+<!--                              <li class="page-item"><a class="page-link" href="#">3</a></li>-->
+<!--                              <li class="page-item">-->
+<!--                                <a class="page-link" href="#" aria-label="Next">-->
+<!--                                  <span aria-hidden="true"><i class="uil uil-arrow-right"></i></span>-->
+<!--                                </a>-->
+<!--                              </li>-->
+                            </ul>
+                            <!-- /.pagination -->
+                          </nav>
+                        </div>
+                        <div class="col">
+                          <a  th:if="${!#lists.isEmpty(session.mvo)}" href="/projBoardForm" class="btn btn-sm btn-gradient gradient-7 float-end"><i
+                              class="uil uil-pen"></i>&nbsp;글쓰기</a>
+                          <a th:if="${#lists.isEmpty(session.mvo)}" href="javascript:altr()"  class="btn btn-sm btn-gradient gradient-7 float-end"><i
+                              class="uil uil-pen"></i>&nbsp;글쓰기</a>
+                        </div>
+
+                      </div>
+                      <div class="card-footer pb-0">
+                        <div class="row m-auto mb-3">
+                          <div class="col">
+                            <form class="search-form" action="/projSearch" method="GET">
+                              <div class="input-group mb-3">
+                                <select class="form-select " aria-label="Default select example" name="option">
+
+                                  <option value="1">제목</option>
+
+                                  <option value="2">내용</option>
+                                  <input type="text" class="form-control w-50" placeholder="Search"
+                                         aria-label="Example text with button addon" aria-describedby="button-addon1"
+                                         id="search" name="search"/>
+                                </select>
+                              </div>
+                            </form>
+                          </div>
+                        </div>
+                      </div>
+
+                      <!--/.card-body -->
+                    </div>
+                  </div>
+                    <!--/.card -->
+          </div>
+          <!-- /column -->
+        </div>
+        <!-- /.row -->
+      </div>
+      <!-- /.container -->
+      </div>
+    </section>
+    <!-- /section -->
+  </div>
+  <!-- /.content-wrapper -->
+ <th:block th:replace="jy/footer" ::footer></th:block>
+  <div class="progress-wrap">
+    <svg class="progress-circle svg-content" width="100%" height="100%" viewBox="-1 -1 102 102">
+      <path d="M50,1 a49,49 0 0,1 0,98 a49,49 0 0,1 0,-98" />
+    </svg>
+  </div>
+  <script src="./assets/js/plugins.js"></script>
+  <script src="./assets/js/theme.js"></script>
+  <script src="./assets/js/purePajinate.js"></script>
+ <script th:inline="javascript">
+	  /*<![CDATA[*/
+		function altr(){
+    alert("로그인 후 이용 가능합니다.");
+  }
+
+     /*]]>*/
+</script>
+</body>
+
+</html>

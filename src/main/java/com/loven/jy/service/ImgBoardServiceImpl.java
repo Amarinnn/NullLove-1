@@ -3,7 +3,6 @@ package com.loven.jy.service;
 import java.util.HashMap;
 import java.util.List;
 
-import com.loven.entity.BlindVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -63,5 +62,24 @@ public class ImgBoardServiceImpl implements ImgBoardService{
 
 		return mapper.searchContent(map);
 	}
-	
+
+	@Override
+	public int imglikeSelect(int seq) {
+		return mapper.imglikeSelect(seq);
+	}
+
+	@Override
+	public int imglikeWho(HashMap<String, Object> map) {
+		return mapper.imglikeWho(map);
+	}
+
+	@Override
+	public void imglikeUp(HashMap<String, Object> map) {
+		mapper.imglikeUp(map);
+	}
+	@Override
+	public void imglikeDel(HashMap<String, Object> map) {
+		mapper.imglikeDel(map);
+	}
+
 }	

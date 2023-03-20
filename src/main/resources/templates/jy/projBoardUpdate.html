@@ -32,7 +32,7 @@
       <div class="container pt-17 pb-20 pt-md-15 pb-md-21 text-center">
         <div class="row">
           <div class="col-lg-8 mx-auto">
-            <h1 class="display-1 mb-3">우리회사좋아요</h1>
+            <h1 class="display-1 mb-3">우수사업계획서</h1>
             <!-- /nav -->
           </div>
           <!-- /column -->
@@ -50,7 +50,7 @@
               <div class="card-body text-center">
                 <div class="row row-cards ">
                   <div class="col-12">
-                    <form id="writeForm" method="post" action="/imgBoardUpdate">
+                    <form id="writeForm" method="post" action="/projBoardUpdate"  enctype="multipart/form-data" onsubmit="javascript:registerAction()">
                       <div class="bg-light border-y">
                         <div class="row">
                           <div class="bg-light border-y">
@@ -68,6 +68,22 @@
                                     <td class="text-center bg-soft-ash" >작성일
                                     </td>
                                     <td class=" text-center"  th:text="${#dates.format(vo.date, 'yy-MM-dd')}">date</td>
+                                  </tr>
+                                  <tr>
+                                    <td class="text-start" colspan="4">
+                                      <button id="btn-upload" type="button"
+                                              class="py-1 btn btn-primary btn-sm rounded-pill "
+                                              style="outline: none;">파일 수정
+                                      </button>
+                                      <input id="input_file" multiple="multiple"
+                                             type="file" style="display:none;">
+                                      <span style="font-size:12px; color: gray;">&nbsp;※첨부파일은 최대 1개까지 등록이 가능합니다.</span>
+                                      <div class="data_file_txt mt-2" id="data_file_txt">
+                                        <p class=" mb-1">수정된 파일</p>
+                                        <div id="articlefileChange">
+                                        </div>
+                                      </div>
+                                    </td>
                                   </tr>
                                 </tbody>
                               </table>
@@ -151,9 +167,121 @@
 			alert("내용을 입력하세요");
 			return false;
       }
-      writeForm.submit();
+     registerAction();
+	}
+ $(document).ready(function()
+			// input file 파일 첨부시 fileCheck 함수 실행
+			{
+				$("#input_file").on("change", fileCheck);
+			});
+
+	/**
+	 * 첨부파일로직
+	 */
+	$(function () {
+	    $('#btn-upload').click(function (e) {
+	        e.preventDefault();
+	        $('#input_file').click();
+	    });
+	});
+
+	// 파일 현재 필드 숫자 totalCount랑 비교값
+	var fileCount = 0;
+	// 해당 숫자를 수정하여 전체 업로드 갯수를 정한다.
+	var totalCount = 1;
+	// 파일 고유넘버
+	var fileNum = 0;
+	// 첨부파일 배열
+	var content_files = new Array();
+
+	function fileCheck(e) {
+	    var files = e.target.files;
+
+	    // 파일 배열 담기
+	    var filesArr = Array.prototype.slice.call(files);
+
+	    // 파일 개수 확인 및 제한
+	    if (fileCount + filesArr.length > totalCount) {
+	      $.alert('파일은 최대 '+totalCount+'개까지 업로드 할 수 있습니다.');
+	      return;
+	    } else {
+	    	 fileCount = fileCount + filesArr.length;
+	    }
+
+	    // 각각의 파일 배열담기 및 기타
+	    filesArr.forEach(function (f) {
+	      var reader = new FileReader();
+	      reader.onload = function (e) {
+	        content_files.push(f);
+	        $('#articlefileChange').append(
+	       		'<div id="file' + fileNum + '" onclick="fileDelete(\'file' + fileNum + '\')">'
+	       		+ '<font style="font-size:12px">' + f.name + '</font>'
+	       		+ '<i class="uil uil-trash-alt" style="font-size:20px; color:red; vertical-align: middle; cursor: pointer;"></i>'
+	       		+ '<div/>'
+			);
+	        fileNum ++;
+	      };
+	      reader.readAsDataURL(f);
+	    });
+	    console.log(content_files);
+	    //초기화 한다.
+	    $("#input_file").val("");
+	  }
+
+	// 파일 부분 삭제 함수
+	function fileDelete(fileNum){
+	    var no = fileNum.replace(/[^0-9]/g, "");
+	    content_files[no].is_delete = true;
+		$('#' + fileNum).remove();
+		fileCount --;
+	    console.log(content_files);
 	}
 
+	/*
+	 * 폼 submit 로직
+	 */
+		function registerAction(){
+      var form = $("form")[0];
+      var formData = new FormData(form);
+        for (var x = 0; x < content_files.length; x++) {
+          // 삭제 안한것만 담아 준다.
+          if(!content_files[x].is_delete){
+             formData.append("article_file", content_files[x]);
+          }
+        }
+        var title = $('#title').val();
+        var id = $('#id').val();
+        var content = tinymce.get("editor").getContent();
+        /* formData.append('title',title);
+        formData.append('id',id);  */
+        formData.delete('content');
+        formData.append('content', content);
+        console.log(formData);
+
+       /*
+       * 파일업로드 multiple ajax처리
+       */
+      $.ajax({
+              type: "POST",
+              enctype: "multipart/form-data",
+              url: "/projBoardUpdate",
+              data : formData,
+              processData: false,
+              contentType: false,
+              success: function (data) {
+              if(JSON.parse(data)['result'] == "OK"){
+                alert("수정되었습니다.");
+                window.location.href = "/projBoardList";
+          } else
+            alert("Error");
+              },
+              error: function (xhr, status, error) {
+              alert("Error.");
+             return false;
+              }
+            });
+            return false;
+		}
 
    /*]]>*/
 </script>

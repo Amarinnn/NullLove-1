@@ -31,7 +31,7 @@
     <div class="container pt-17 pb-20 pt-md-15 pb-md-21 text-center">
       <div class="row">
         <div class="col-lg-8 mx-auto">
-          <h1 class="display-1 mb-3">우리회사좋아요</h1>
+          <h1 class="display-1 mb-3">우수사업계획서</h1>
           <!-- /nav -->
         </div>
         <!-- /column -->
@@ -49,7 +49,7 @@
             <div class="card-body text-center">
               <div class="row row-cards ">
                 <div class="col-12">
-                  <form action="imgBoardWrite" name="dataForm" id="dataForm"
+                  <form action="projBoardWrite" name="dataForm" id="dataForm"
                         enctype="multipart/form-data" onsubmit="javascript:registerAction()">
                     <div class="bg-light border-y">
                       <div class="row">
@@ -81,7 +81,7 @@
                                   </button>
                                   <input id="input_file" multiple="multiple"
                                          type="file" style="display:none;">
-                                  <span style="font-size:12px; color: gray;">&nbsp;※첨부파일은 최대 5개까지 등록이 가능합니다.</span>
+                                  <span style="font-size:12px; color: gray;">&nbsp;※첨부파일은 최대 1개까지 등록이 가능합니다.</span>
                                   <div class="data_file_txt mt-2" id="data_file_txt">
                                     <span>첨부 파일 목록</span>
                                     <br/>
@@ -181,7 +181,7 @@
 			alert("내용을 입력하세요");
 			return false;
       } if(content_files==""){
-		alert("사진을 한 개이상 등록하세요");
+		alert("파일을 한 개이상 등록하세요");
 		return false;}
 		registerAction();
 	} 
@@ -206,7 +206,7 @@
 	// 파일 현재 필드 숫자 totalCount랑 비교값
 	var fileCount = 0;
 	// 해당 숫자를 수정하여 전체 업로드 갯수를 정한다.
-	var totalCount = 5;
+	var totalCount = 1;
 	// 파일 고유넘버
 	var fileNum = 0;
 	// 첨부파일 배열
@@ -283,14 +283,14 @@
 		$.ajax({
 	   	      type: "POST",
 	   	   	  enctype: "multipart/form-data",
-	   	      url: "/imgBoardWrite",
+	   	      url: "/projBoardWrite",
 	       	  data : formData,
 	       	  processData: false,
 	   	      contentType: false,
 	   	      success: function (data) {
 	   	    	if(JSON.parse(data)['result'] == "OK"){
 	   	    		alert("등록되었습니다.");
-	   	    		window.location.href = "/imgBoardList";
+	   	    		window.location.href = "/projBoardList";
 				} else
 					alert("Error");
 	   	      },

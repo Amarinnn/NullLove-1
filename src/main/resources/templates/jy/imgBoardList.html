@@ -89,9 +89,9 @@
                             <!--/.card-body -->
                             <div class="card-footer py-2 px-3">
                               <ul class="post-meta d-flex mb-0">
-                                <li class=""><i class="uil uil-calendar-alt"></i><span class="small" th:text="${#dates.format(img.date, 'yy-MM-dd')}">date</span></li>
+                                <li class=""><i class="uil uil-calendar-alt"></i><span class="small" th:text="${#dates.format(img.date, 'MM-dd')}">date</span></li>
                                 <li class=""><i class="uil uil-eye"></i><span class="small" th:text="${img.cnt}">cnt</span></li>
-                                <!-- <li class=""><i class="uil uil-heart-alt"></i><span class="small" th:text="${img.likes}">likes</span></li> -->
+                                 <li class=""><i class="uil uil-heart-alt"></i><span class="small" th:text="${img.count}">count</span></li>
                                 <li class=""><span class="small text-end" th:text="${img.id}">id</span></li>
                               </ul>
                               <!-- /.post-meta -->
@@ -112,7 +112,9 @@
                   	<nav class="page_navigation d-flex justify-content-center" aria-label="pagination"></nav>
                   </div>
                   <div class="col">
-                    <a href="/imgBoardForm" class="btn btn-sm btn-gradient gradient-7 float-end"><i
+                    <a  th:if="${!#lists.isEmpty(session.mvo)}" href="/imgBoardForm" class="btn btn-sm btn-gradient gradient-7 float-end"><i
+                        class="uil uil-pen"></i>&nbsp;글쓰기</a>
+                    <a th:if="${#lists.isEmpty(session.mvo)}" href="javascript:altr()"  class="btn btn-sm btn-gradient gradient-7 float-end"><i
                         class="uil uil-pen"></i>&nbsp;글쓰기</a>
                   </div>
                 </div>

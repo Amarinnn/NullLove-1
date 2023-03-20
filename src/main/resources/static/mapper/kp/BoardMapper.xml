@@ -38,11 +38,19 @@
 	</select>
 	<!-- 블라인드 게시판 리스트 -->
 	<select id="blindList" resultType="BlindVO" parameterType="Criteria">
-		select b.*, u.nick from blind b, User u where b.id = u.id and b.id!='Admin' order by seq desc limit #{pageStart}, #{perPageNum}
+		select b.*, u.nick, sum(case when l.seq = b.seq then 1 else 0 end) as count
+		from blind_like l, blind b, User u
+		where b.id = u.id and b.id!='Admin'
+		group by b.seq
+		order by b.seq desc limit #{pageStart}, #{perPageNum}
 	</select>
 	<!-- 블라인드 게시판 공지사항 리스트 -->
 	<select id="ablindList" resultType="BlindVO" parameterType="Criteria">
-		select * from blind where id='Admin' order by seq desc
+		select b.*,  sum(case when l.seq = b.seq then 1 else 0 end) as count
+		from blind_like l, blind b
+		where b.id='Admin'
+		group by b.seq
+		order by b.seq desc
 	</select>
 	<!-- 블라인드 게시판 인서트 -->
 	<insert id="blindInsert" parameterType="BlindVO">
@@ -78,12 +86,25 @@
 	
 	<!-- 블라인드 검색 -->
 	<select id="searchTitle" resultType="BlindVO" parameterType="hashmap">
-		select * from blind where title like concat('%', #{search}, '%') and id != 'Admin' limit #{cri.pageStart}, #{cri.perPageNum}
+<!--		select * from blind where title like concat('%', #{search}, '%') and id != 'Admin' limit #{cri.pageStart}, #{cri.perPageNum}-->
+		select b.*, u.nick, sum(case when l.seq = b.seq then 1 else 0 end) as count
+		from blind_like l, blind b, User u
+		where title like concat('%', #{search}, '%') and b.id != 'Admin' and b.id=u.id
+		group by b.seq
+		order by b.seq desc
+		limit #{cri.pageStart}, #{cri.perPageNum}
 	</select>
 	
 	<select id="searchContent" resultType="BlindVO" parameterType="hashmap">
-		select * from blind where content like concat('%', #{search}, '%') and id != 'Admin' limit #{cri.pageStart}, #{cri.perPageNum}
+<!--		select * from blind where content like concat('%', #{search}, '%') and id != 'Admin' limit #{cri.pageStart}, #{cri.perPageNum}-->
+		select b.*, u.nick, sum(case when l.seq = b.seq then 1 else 0 end) as count
+		from blind_like l, blind b, User u
+		where content like concat('%', #{search}, '%') and id != 'Admin' and b.id=u.id
+		group by b.seq
+		order by b.seq desc
+		limit #{cri.pageStart}, #{cri.perPageNum}
 	</select>
+
 	
 	<!-- 검색된 게시글의 수 -->
 	<select id="cntSearch1" resultType="int">
@@ -93,6 +114,17 @@
 	<select id="cntSearch2" resultType="int">
 		select count(*) from blind where content like concat('%', #{search}, '%') and id != 'Admin'
 	</select>
-	
+	<select id="blindlikeSelect" resultType="int" parameterType="int">
+		select count(*) from blind_like where seq=#{seq}
+	</select>
+	<select id="blindlikeWho" resultType="int" parameterType="hashmap">
+		select count(*) from blind_like where seq=#{seq} and id=#{id}
+	</select>
+	<insert id="blindlikeUp" parameterType="hashmap">
+		insert into blind_like values(1,#{seq},#{id});
+	</insert>
+	<delete id="blindlikeDel" parameterType="hashmap">
+		delete from blind_like where  seq=#{seq} and id=#{id}
+	</delete>
 
 </mapper>

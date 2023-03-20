@@ -68,6 +68,11 @@
     border-radius: 0.8rem !important;
 }
 
+.post-meta li:before {
+  margin: 0 0.4rem 0 !important;
+  opacity: 0.3 !important;
+}
+
 /* 
 .page_navigation { width: 100%; text-align: center }
 .page_navigation ul { box-shadow: 0rem 0rem 1.25rem rgba(30, 34, 40, 0.04)}
