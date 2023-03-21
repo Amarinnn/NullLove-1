@@ -69,7 +69,7 @@
 		update project set notice='A' where seq=#{seq}
 	</update>
 	<update id="projDelnotice" parameterType="int">
-		update project set notice='n' where seq=#{seq}
+		update project set notice='n' where seq=#{seq}`
 	</update>
 	<select id="total" resultType="int">
 		select count(*) as count from project

@@ -10,14 +10,16 @@
     content="bootstrap 5, business, corporate, creative, gulp, marketing, minimal, modern, multipurpose, one page, responsive, saas, sass, seo, startup, html5 template, site template">
   <meta name="author" content="elemis">
   <title>RCMD</title>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+  <script src="./assets/js/jquery.simplePagination.js"></script>
+
   <link rel="shortcut icon" href="./assets/img/favicon.png">
   <link rel="stylesheet" href="./assets/css/plugins.css">
   <link rel="stylesheet" href="./assets/css/style.css">
   <link rel="stylesheet" href="./assets/css/jy.css">
   <link rel="preload" href="./assets/css/fonts/noto2.css" as="style" onload="this.rel='stylesheet'">
   <!-- pagenation -->
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-  <script src="/js/jquery.twbsPagination.js"></script>
+
 </head>
 
 <body>
@@ -72,18 +74,20 @@
                             <td th:text="${proj.count}" class="">count</td>
                             <td th:text="${proj.cnt}" class="">cnt</td>
                           </tr>
+                          </tbody>
+                          <tbody class="fw-semibold" id="tboddy">
                           <!--일반유저게시글-->
-                          <tr th:if="${#strings.equals(proj.notice, 'n')}" th:each="proj:${list}">
-                            <td th:text="${proj.seq}" class="text-center">seq</td>
-                            <td   th:if="${#lists.isEmpty(session.mvo)}" class="text-start"><a  href="javascript:altr()"  class="text-reset" th:text="${proj.title}"></a></td>
-                            <td   th:if="${!#lists.isEmpty(session.mvo)}" class="text-start"><a th:href="@{/projBoardView(seq=${proj.seq})}" class="text-reset" th:text="${proj.title}"></a></td>
-                            <td th:text="${proj.id}" class="">id
-                              <!-- <td th:text="${proj.id}" class="">id -->
-                            </td>
-                            <td th:text="${#dates.format(proj.date, 'yy-MM-dd')}" class="">date</td>
-                            <td th:text="${proj.count}" class="">count</td>
-                            <td th:text="${proj.cnt}" class="">cnt</td>
-                          </tr>
+<!--                          <tr th:if="${#strings.equals(proj.notice, 'n')}" th:each="proj:${list}">-->
+<!--                            <td th:text="${proj.seq}" class="text-center">seq</td>-->
+<!--                            <td   th:if="${#lists.isEmpty(session.mvo)}" class="text-start"><a  href="javascript:altr()"  class="text-reset" th:text="${proj.title}"></a></td>-->
+<!--                            <td   th:if="${!#lists.isEmpty(session.mvo)}" class="text-start"><a th:href="@{/projBoardView(seq=${proj.seq})}" class="text-reset" th:text="${proj.title}"></a></td>-->
+<!--                            <td th:text="${proj.id}" class="">id-->
+<!--                              &lt;!&ndash; <td th:text="${proj.id}" class="">id &ndash;&gt;-->
+<!--                            </td>-->
+<!--                            <td th:text="${#dates.format(proj.date, 'yy-MM-dd')}" class="">date</td>-->
+<!--                            <td th:text="${proj.count}" class="">count</td>-->
+<!--                            <td th:text="${proj.cnt}" class="">cnt</td>-->
+<!--                          </tr>-->
                           </tbody>
                         </table>
                       </div>
@@ -148,6 +152,8 @@
       </div>
       <!-- /.container -->
       </div>
+        </div>
+      </div>
     </section>
     <!-- /section -->
   </div>
@@ -161,14 +167,99 @@
   <script src="./assets/js/plugins.js"></script>
   <script src="./assets/js/theme.js"></script>
   <script src="./assets/js/purePajinate.js"></script>
- <script th:inline="javascript">
+</body>
+<script th:inline="javascript">
 	  /*<![CDATA[*/
 		function altr(){
     alert("로그인 후 이용 가능합니다.");
-  }
+  };
 
-     /*]]>*/
+  // pagenation 세팅
+    let totalCount = /*[[${total}]]*/; //글의 총수
+    let countList = 10; //보여질 글의 갯수
+    let totalPage = totalCount / countList; //총 페이지의 수
+    let pageSize =5; //페이지네이션의 사이즈
+
+    if (totalCount % countList > 0) {
+        totalPage++;
+    }
+
+
+
+    $('#pagination').twbsPagination({
+      totalPages : totalPage, //총 페이지수
+      visiablePages : 5, //보이는 페이지수
+      startPage:1, //시작페이지
+
+
+        //" « "라는 문자열로 최신글 방향을 표시
+        first:"First" ,
+
+        //" » "라는 문자열로 마지막글 방향을 표시
+        last:"Last" ,
+
+        prev:"Prev",
+        next:"Next",
+        onPageClick: function (event, page) {
+          paging(page);
+                }
+         });
+      function paging(page){
+        var list = /*[[${list}]]*/;
+        let str="";
+
+        let start =(page-1)*countList;
+        if (page==1){start=0};
+
+        let end = start+countList-1;
+        var endd = Math.floor(totalPage) ;
+        if (page==endd){end=totalCount-1};
+
+        var arr= new Array(10);
+
+        console.log('page : '+page);
+        console.log('epage : '+endd);
+        console.log('start : '+start);
+        console.log('end : '+end);
+
+        for(let i=start; i<=end; i++){
+          const ll = list[i];
+          var k=0;
+          console.log(i);
+            for(var key in ll) {
+<!--              console.log(key + " : " + ll[key]);-->
+              arr[k]=ll[key];
+              k++;
+            }
+            console.log(arr);
+            var dd = arr[3]
+            dd = dd.slice(2,10);
+            console.log(dd);
+            $('#tboddy').empty();
+              str+='<tr>';
+                str+='<td>'+arr[0]+'</td>'; //seq
+                //비로그인일때
+                if(/*[[${#lists.isEmpty(session.mvo)}]]*/==null){
+                  str+='<td class="text-start"><a href="javascript:altr()" class="text-reset">'+arr[1]+'</a></td>';
+                }
+                //로그인일때
+                if(/*[[${!#lists.isEmpty(session.mvo)}]]*/==null){
+                  str+='<td class="text-start"><a href="projBoardView?seq='+arr[0]+'" class="text-reset">'+arr[1]+'</a></td>';
+                }
+<!--                str+='<td>'+arr[1]+'</td>'; //title-->
+                str+='<td>'+arr[7]+'</td>'; //id
+                str+='<td>'+dd+'</td>'; //date
+                str+='<td>'+arr[8]+'</td>'; //count(좋아요)
+                str+='<td>'+arr[4]+'</td>'; //cnt(조회수)
+<!--              str+='<td>'+arr[2]+'</td>'; //content-->
+<!--              str+='<td>'+arr[5]+'</td>'; //lieks-->
+<!--              str+='<td>'+arr[6]+'</td>'; //notice-->
+<!--              str+='<td>'+arr[9]+'</td>'; //file-->
+              str+='</tr>';
+            $('#tboddy').append(str);
+        };
+      };
+ /*]]>*/
 </script>
-</body>
 
 </html>

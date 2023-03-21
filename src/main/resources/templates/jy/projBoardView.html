@@ -104,9 +104,9 @@
                           <a href="javascript:goDel()" class="btn btn-sm btn-red float-end me-2">삭제</a>
                           <a th:href="@{/projBoardUpdateForm?seq={seq}(seq=${vo.seq})}"
                              class="btn btn-sm btn-success  float-end me-2">수정</a>
-                          <a th:if=" ${#strings.equals(vo.notice, 'A')}" href="javascript:subNoticeDel()" type="button"
+                          <a th:if=" ${#strings.equals(session.mvo.login_type, 'A')} and ${#strings.equals(vo.notice, 'A')}" href="javascript:subNoticeDel()" type="button"
                              class="btn btn-sm btn-orange" > 공지사항 해제</a>
-                          <a th:if=" ${#strings.equals(vo.notice, 'n')}" href="javascript:subNotice()" type="button"
+                          <a th:if=" ${#strings.equals(session.mvo.login_type, 'A')} and ${#strings.equals(vo.notice, 'n')}" href="javascript:subNotice()" type="button"
                              class="btn btn-sm btn-orange" > 공지사항 등록</a>
                         </div>
                       </div>

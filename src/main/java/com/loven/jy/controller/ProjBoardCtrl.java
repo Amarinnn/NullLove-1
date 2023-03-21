@@ -213,8 +213,12 @@ public class ProjBoardCtrl {
 		}else {
 			if(option.equals("1")) {
 				list = service.searchTitle(map);
+				int total = list.size();
+				model.addAttribute("total",total);
 			}else {
 				list = service.searchContent(map);
+				int total = list.size();
+				model.addAttribute("total",total);
 			}
 		}
 		model.addAttribute("list", list);
