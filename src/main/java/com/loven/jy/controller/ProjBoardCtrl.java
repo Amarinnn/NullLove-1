@@ -207,19 +207,21 @@ public class ProjBoardCtrl {
 		HashMap<String, Object> map = new HashMap<String, Object>();
 		map.put("search", search);
 		if(search == "") {
-			list = service.getLists();
-			model.addAttribute("list", list);
-			return "redirect:/projBoardList";
-		}else {
-			if(option.equals("1")) {
-				list = service.searchTitle(map);
-				int total = list.size();
-				model.addAttribute("total",total);
+				list = service.getLists();
+				model.addAttribute("list", list);
+				int total = service.total();
+				model.addAttribute("total", total);
+				return "redirect:/projBoardList";
 			}else {
-				list = service.searchContent(map);
-				int total = list.size();
-				model.addAttribute("total",total);
-			}
+				if(option.equals("1")) {
+					list = service.searchTitle(map);
+					int total = list.size();
+					model.addAttribute("total",total);
+				}else {
+					list = service.searchContent(map);
+					int total = list.size();
+					model.addAttribute("total",total);
+				}
 		}
 		model.addAttribute("list", list);
 

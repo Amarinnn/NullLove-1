@@ -4,6 +4,10 @@ import com.loven.entity.BlindVO;
 import com.loven.entity.Comment;
 import com.loven.entity.PostVO;
 import com.loven.entity.User;
+import com.loven.jy.entity.Boast;
+import com.loven.jy.entity.Boast_cmt;
+import com.loven.jy.entity.Proj_cmt;
+import com.loven.jy.entity.Project;
 import com.loven.service.MypageService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
@@ -38,8 +42,12 @@ public class MypageController {
 			String id = vo.getId();
 			// System.out.println(id);
 			List<BlindVO> list = mypageService.postList(id);
+			List<Project> Plist = mypageService.projList(id);
+			List<Boast> Blist = mypageService.boastList(id);
 			// System.out.println(list);
 			model.addAttribute("list", list);
+			model.addAttribute("Plist", Plist);
+			model.addAttribute("Blist", Blist);
 		}
 
 		return "mypageList";
@@ -97,7 +105,16 @@ public class MypageController {
 
 		return "redirect:/mypageList";
 	}
-
+	@RequestMapping("/mypageProjDelete")
+	public String mypageProjDelete(@RequestParam("seq") int seq) {
+		mypageService.mypageProjDelete(seq);
+		return "redirect:/mypageList";
+	}
+	@RequestMapping("/mypageBoastDelete")
+	public String mypageBoastDelete(@RequestParam("seq") int seq) {
+		mypageService.mypageBoastDelete(seq);
+		return "redirect:/mypageList";
+	}
 	// 마이페이지 내가쓴 댓글 리스트
 	@RequestMapping("/mypagecmtList")
 	public String cmtList(HttpSession session, Model model) {
@@ -109,6 +126,8 @@ public class MypageController {
 
 			/* System.out.println(id); */
 			List<Comment> list = mypageService.cmtList(id);
+			List<Boast_cmt> Blist = mypageService.boastcmtList(id);
+			List<Proj_cmt> Plist = mypageService.projcmtList(id);
 //			System.out.println(list);
 			model.addAttribute("list", list);
 		}
@@ -130,6 +149,17 @@ public class MypageController {
 
 			return "redirect:/mypagecmtList";
 		}
+	@RequestMapping("/mypageboastcmtDelete")
+	public String mypageboastcmtDelete(@RequestParam("seq") int seq) {
+		mypageService.mypageboastcmtDelete(seq);
+		return "redirect:/mypagecmtList";
+	}
+	@RequestMapping("/mypageprojcmtDelete")
+	public String mypageprojcmtDelete(@RequestParam("seq") int seq) {
+		mypageService.mypageprojcmtDelete(seq);
+		return "redirect:/mypagecmtList";
+	}
+
 		@RequestMapping("/mail")
 		public String mail() {
 			return "mail";

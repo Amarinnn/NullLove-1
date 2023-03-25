@@ -75,21 +75,53 @@
 	<select id="postList" resultType="BlindVO">
 		select * from blind where id = #{id} order by date desc
 	</select>
+	<select id="projList" resultType="Project">
+		select * from project where id = #{id} order by date desc
+	</select>
+	<select id="boastList" resultType="Boast">
+		select * from boast where id = #{id} order by date desc
+	</select>
 
 	<!-- 마이페이지 유저 수정 -->
 	<update id="update_vo" parameterType="User">
 		update User set pw=#{pw}, email=#{email}, nick=#{nick} where id=#{id}
 	</update>
+	<!--마이페이지 게시글삭제 -->
 	<delete id="mypageDelete" parameterType="String">
 		delete from blind where
 		seq=#{seq}
 	</delete>
+	<delete id="mypageBoastDelete" parameterType="int">
+		delete from boast where
+		seq=#{seq}
+	</delete>
+	<delete id="mypageProjDelete" parameterType="int">
+		delete from project where
+		seq=#{seq}
+	</delete>
+
 	<select id="cmtList" resultType="Comment">
 		select * from blind_cmt where
 		id=#{id}
 	</select>
+	<select id="boastcmtList" resultType="Boast_cmt">
+		select * from boast_cmt where
+		id=#{id}
+	</select>
+	<select id="projcmtList" resultType="Proj_cmt">
+		select * from proj_cmt where
+		id=#{id}
+	</select>
 	<delete id="mypagecmtDelete" parameterType="String">
 		delete from blind_cmt
+		where cmt_seq=#{cmt_seq}
+	</delete>
+	<delete id="mypageprojcmtDelete" parameterType="int">
+		delete from proj_cmt
+		where cmt_seq=#{cmt_seq}
+	</delete>
+	<delete id="mypageboastcmtDelete" parameterType="int">
+		delete from boast_cmt
 		where cmt_seq=#{cmt_seq}
 	</delete>
 </mapper>
